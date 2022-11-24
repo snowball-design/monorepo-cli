@@ -1,0 +1,17 @@
+{
+  "name": "monorepo-cli",
+  "version": "0.0.0-beta",
+  "description": "",
+  "main": "bin/index.js",
+  "bin": "bin/index.js",
+  "scripts": {
+    "start": "npm link"
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
