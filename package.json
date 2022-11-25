@@ -15,8 +15,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chalk": "3.0.0",
     "commander": "^8.2.0",
-    "inquirer": "^8.2.0",
-    "chalk": "3.0.0"
+    "file-save": "^0.2.0",
+    "inquirer": "^8.2.0"
   }
 }

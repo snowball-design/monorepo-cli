@@ -1,4 +1,6 @@
 const { TEMPLATE_PATH, PROJECT_PATH } = require("./path");
-const { log } = require("./log");
+const copy = require("./copy");
+const log = require("./log");
+const createFile = require("./file");
 
-module.exports = { TEMPLATE_PATH, PROJECT_PATH, log };
+module.exports = { TEMPLATE_PATH, PROJECT_PATH, copy, log, createFile };

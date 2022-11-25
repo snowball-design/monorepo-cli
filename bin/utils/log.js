@@ -4,13 +4,13 @@ const log = {};
 
 [
   { name: "error", value: "red" },
-  { name: "succss", value: "green" },
+  { name: "success", value: "green" },
   { name: "warning", value: "yellow" },
-  { name: "defalut", value: "blue" },
+  { name: "default", value: "blue" },
 ].forEach((type) => {
   log[type.name] = (msg) => {
     console.log(chalk[type.value](msg));
   };
 });
 
-exports.module = { log };
+module.exports = log;
