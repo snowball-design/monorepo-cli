@@ -6,8 +6,6 @@ const getPackages = (packagePath) =>
 const scopes = [
   ...getPackages('packages'),
   ...getPackages('build'),
-  'docs',
-  'playground',
 ]
 module.exports = {
   extends: ['@commitlint/config-conventional'],

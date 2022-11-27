@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs").promises;
 const fse = require("fs-extra");
 const inquirer = require("inquirer");
+const eslintrc = require("../templates/.eslintrc.json");
 const package = require("../templates/package.json");
 
 const { PROJECT_PATH, TEMPLATE_PATH, log, createFile } = require("../utils");
@@ -30,16 +31,18 @@ function initProject(config) {
     ".npmrc",
     "pnpm-workspace.yaml",
     ".eslintignore",
-    ".eslintrc.js",
     ".prettierignore",
     ".prettierrc",
     "commitlint.config.js",
   ];
   if (language == "TypeScript" && !needmove.includes("tsconfig.json")) {
     needmove.push("tsconfig.json");
+    eslintrc.plugins.push("@typescript-eslint");
     devdeps.push(
       { name: "typescript", vertion: "^4.7.4" },
-      { name: "@vue/tsconfig", vertion: "^0.1.3" }
+      { name: "@vue/tsconfig", vertion: "^0.1.3" },
+      { name: "@typescript-eslint/eslint-plugin", vertion: "^5.42.0" },
+      { name: "@typescript-eslint/parser", vertion: "^5.42.0" }
     );
   }
   if (test && !needmove.includes("vitest.config.ts")) {
@@ -56,10 +59,19 @@ function initProject(config) {
     const rootPath = path.join(PROJECT_PATH, projectName);
     move(needmove, rootPath);
     moveFolder(TEMPLATE_PATH, rootPath);
-    createFile(
-      path.join(rootPath, "package.json"),
-      JSON.stringify(_package, null, 2)
-    );
+    [
+      {
+        path: "package.json",
+        template: JSON.stringify(_package, null, 2),
+      },
+      {
+        path: ".eslintrc.js",
+        template: `module.exports = ${JSON.stringify(eslintrc, null, 2)}`,
+      },
+    ].forEach((item) => {
+      createFile(path.join(rootPath, item.path), item.template);
+    });
+
     resolve();
   });
 }
@@ -101,6 +113,7 @@ module.exports = () => {
             .then(() => {
               // 初始化项目
               fs.mkdir(path.join(projectName, "packages"));
+              fs.mkdir(path.join(projectName, "build"));
               return initProject(answers);
             })
             .then(() => {

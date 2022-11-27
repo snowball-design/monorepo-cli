@@ -1,0 +1,12 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "plugins": ["prettier"],
+  "extends": [],
+  "overrides": [],
+  "settings": {},
+  "rules": {}
+}
