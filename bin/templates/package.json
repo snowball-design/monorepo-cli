@@ -9,9 +9,22 @@
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "scripts": {
-    "dev": "npm -C playground run dev "
+    "preinstall": "npx only-allow pnpm",
+    "format": "prettier --write --cache .",
+    "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json --max-warnings 0 --cache",
+    "lint:fix": "pnpm lint --fix",
+    "lint:commit": "commitlint --from $(git merge-base origin/dev HEAD) --to HEAD > ./commit-lint.txt",
+    "prepare": "husky install"
   },
   "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.26.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "husky": "^8.0.0",
+    "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0"
+  },
   "engines": {
     "node": ">=16"
   },
@@ -22,5 +35,14 @@
   ],
   "keywords": [],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "lint-staged": {
+    "*.{vue,js,ts,jsx,tsx,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  }
 }

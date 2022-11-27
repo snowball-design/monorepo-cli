@@ -1,5 +1,6 @@
 const path = require("path");
 const fs = require("fs").promises;
+const fse = require("fs-extra");
 const inquirer = require("inquirer");
 const package = require("../templates/package.json");
 
@@ -13,15 +14,30 @@ function move(arrs, to) {
     });
 }
 
+function moveFolder(from, to) {
+  const _F = path.join(from, ".husky");
+  const _T = path.join(to, ".husky");
+  fse.copy(_F, _T);
+}
+
 function initProject(config) {
   let { projectName, language, test } = config;
   const _package = package;
-  let deps = [];
+  const devdeps = [];
   _package.name = projectName;
-  const needmove = [".gitignore", ".npmrc", "pnpm-workspace.yaml"];
+  const needmove = [
+    ".gitignore",
+    ".npmrc",
+    "pnpm-workspace.yaml",
+    ".eslintignore",
+    ".eslintrc.js",
+    ".prettierignore",
+    ".prettierrc",
+    "commitlint.config.js",
+  ];
   if (language == "TypeScript" && !needmove.includes("tsconfig.json")) {
     needmove.push("tsconfig.json");
-    deps.push(
+    devdeps.push(
       { name: "typescript", vertion: "^4.7.4" },
       { name: "@vue/tsconfig", vertion: "^0.1.3" }
     );
@@ -29,16 +45,17 @@ function initProject(config) {
   if (test && !needmove.includes("vitest.config.ts")) {
     needmove.push("vitest.config.ts");
     fs.mkdir(path.join(projectName, "test"));
-    deps.push({ name: "vitest", vertion: "^0.21.0" });
+    devdeps.push({ name: "vitest", vertion: "^0.21.0" });
   }
 
-  deps.forEach((dep) => {
-    _package.dependencies[dep.name] = dep.vertion;
+  devdeps.forEach((dep) => {
+    _package.devDependencies[dep.name] = dep.vertion;
   });
 
   return new Promise((resolve) => {
     const rootPath = path.join(PROJECT_PATH, projectName);
     move(needmove, rootPath);
+    moveFolder(TEMPLATE_PATH, rootPath);
     createFile(
       path.join(rootPath, "package.json"),
       JSON.stringify(_package, null, 2)
@@ -72,11 +89,6 @@ module.exports = () => {
         name: "test",
         message: "是否需要单元测试",
       },
-      // {
-      //   type: "confirm",
-      //   name: "playground",
-      //   message: "是否需要Playground",
-      // },
     ])
     .then((answers) => {
       let { projectName } = answers;
