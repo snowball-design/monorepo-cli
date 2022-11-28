@@ -1,6 +1,5 @@
 {
   "name": "$1",
-  "type": "module",
   "packageManager": "pnpm@6.26.1",
   "version": "0.0.0",
   "description": "",
@@ -21,6 +20,7 @@
   "dependencies": {},
   "devDependencies": {
     "eslint": "^8.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "husky": "^8.0.0",
