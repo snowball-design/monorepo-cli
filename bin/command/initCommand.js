@@ -104,7 +104,7 @@ module.exports = () => {
     ])
     .then((answers) => {
       let { projectName } = answers;
-      fs.access(projectName, fs.constants.F_OK).then(
+      fs.access(projectName, fs.F_OK).then(
         () => {
           log.error(`目录 ${projectName} 已经存在！`);
         },
